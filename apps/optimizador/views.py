@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 import json, random, time
+from db_mongo import rutas_col  
 
 def home(request):
     return render(request, "index.html")
@@ -20,7 +21,7 @@ def generar_ruta(locaciones, pedido_id):
     fin_proceso = time.perf_counter()
     proceso_ms = round((fin_proceso - inicio_proceso) * 1000, 2) #Tiempo de calco de ruta
 
-    return {
+    resultado = {
         "pedido_id": pedido_id,
         "ruta": ruta,
         "distancia_m": distancia_m,
@@ -32,6 +33,8 @@ def generar_ruta(locaciones, pedido_id):
         "proceso_ruta_seg": round(proceso_ms / 1000, 4),
         "items_recogidos": len(locaciones)
     }
+
+    return resultado
 
 def calcular_ruta(request):
     try:
